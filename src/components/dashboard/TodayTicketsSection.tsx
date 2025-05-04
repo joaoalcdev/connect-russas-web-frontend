@@ -1,36 +1,26 @@
-// filepath: src/components/dashboard/TodayTicketsSection.tsx
 import { ChevronRight } from "lucide-react";
 import TicketList from "../TicketList"; // Adjust path if needed
 import { Ticket } from "../../types/ticket"; // Adjust path if needed
 import Skeleton from "../../components/ui/skeleton"; // Import Skeleton
 
-interface FormattedTicket {
-  id: string;
-  address: string;
-  entryDate: string;
-  dueDate: string; // Keep if TicketList expects it, even if data isn't available
-  status?: string; // Keep if TicketList expects it
-}
-
 interface TodayTicketsSectionProps {
   tickets: Ticket[];
   loading: boolean;
   error: string | null;
-  onViewAllClick?: () => void; // Optional click handler
+  onViewAllClick?: () => void;
 }
 
 // Helper to format tickets specifically for the list display
-const formatTicketsForList = (tickets: Ticket[]): FormattedTicket[] => {
+const formatTicketsForList = (tickets: Ticket[]): Ticket[] => {
   return tickets.map((t) => ({
-    id: t.id,
-    address: t.address ?? "Endereço não disponível",
+    ...t, // Spread the original ticket properties
     entryDate: t.createdAt
       ? new Date(t.createdAt).toLocaleDateString("pt-BR")
-      : "N/A",
+      : "N/A", // Add the entryDate property
+    address: t.address ?? "Endereço não disponível",
     dueDate: t.createdAt
       ? new Date(t.createdAt).toLocaleDateString("pt-BR")
       : "N/A",
-    status: t.status, // Pass status if TicketList component uses it
   }));
 };
 
@@ -44,7 +34,7 @@ export default function TodayTicketsSection({
     if (loading)
       return (
         <div className="space-y-4">
-          {[...Array(5)].map((_, index) => (
+          {[...Array(2)].map((_, index) => (
             <div key={index} className="flex items-center space-x-4 p-2">
               <div className="space-y-2">
                 <Skeleton className="h-4 w-[250px]" />
@@ -60,8 +50,13 @@ export default function TodayTicketsSection({
         <p className="text-center text-gray-500">Nenhum chamado para hoje.</p>
       );
 
-    const formattedTickets = formatTicketsForList(tickets);
-    // Pass only necessary props to TicketList based on its implementation
+    // Filter tickets for today's date
+    const today = new Date().toISOString().split("T")[0];
+    const todayTickets = tickets.filter((ticket) =>
+      ticket.createdAt?.startsWith(today)
+    );
+
+    const formattedTickets = formatTicketsForList(todayTickets);
     return <TicketList tickets={formattedTickets} />;
   };
 
