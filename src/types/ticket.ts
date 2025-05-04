@@ -51,6 +51,8 @@ export interface Ticket {
   createdAt: string; // ISO Date string
   updatedAt: string; // ISO Date string
   resolvedAt?: string | null; // ISO Date string
+  entryDate: string; // ISO Date string (optional, for display purposes)
+  dueDate?: string; // ISO Date string (optional, for display purposes)
 }
 
 // Based on ListTicketsQuerySchema (def-18)
