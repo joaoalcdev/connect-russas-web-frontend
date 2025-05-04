@@ -3,6 +3,8 @@ import TicketItem, { Ticket } from "./TicketItem"; // Import TicketItem and Tick
 interface TicketListProps {
   tickets: Ticket[];
   showStatus?: boolean;
+  
+
   // statusColumn prop seems redundant if showStatus controls the display
 }
 

@@ -8,7 +8,6 @@ export interface Ticket {
   entryDate: string;
   dueDate?: string;
   status: TicketStatus;
-  title: string;
 }
 
 interface TicketItemProps {
@@ -30,9 +29,7 @@ export default function TicketItem({
       <div className={`border-l-4 pl-4 py-1 ${statusProps.borderColor}`}>
         <div className="flex justify-between">
           <div>
-            <div className="font-medium">
-              {ticket.title} {ticket.address}
-            </div>
+            <div className="font-medium">{ticket.address}</div>
             <div className="text-sm text-gray-500">
               Entrada: {ticket.entryDate}
               {ticket.dueDate ? ` | Prazo: ${ticket.dueDate}` : ""}
